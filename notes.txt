@@ -1,0 +1,71 @@
+Reference the GPT convo.
+
+I need to setup listeners to listen for the computers being called but should also have a listener for pushing parameters (I think that one PC could listen for param saving & param tuning)
+
+
+TODO Need to handle venv.
+
+I'll assign each worker one single outer fold.
+
+One script run from "seed" device. I
+
+for model
+    for outer
+        GridSearch (for param; for inner)
+
+func(model, data, param_grid)
+
+i could push an initial data file that contains all that stuff. Something like:
+from xgboost import XGBClassifier
+etc
+models = {"xgb": (XGBClassifier, {alpha:[1,2,3] etc etc})}
+
+
+Pipeline:
+Have listeners set up
+Push data: actual functions to pull data (by fold) then a function or way of pulling models and parameter GridSearch
+On the seed device, round robin assign tasks for model; for outer; (calls GridSearch (for param; for inner))
+
+TODO saving data?
+TODO assign each task (one run of the seed computer) an ID and each subtask (one iteration of the seed for loop) another ID? That way I can save things to relevant folders
+
+
+
+On a worker machine:
+server_files
+    listener.py
+    task1234
+        data.py
+        models.py
+        runner.py
+    task1235
+        something.py
+        another_thing.py
+        data.csv
+    etc etc
+
+
+Three device types: Seed, Manager, Worker. Seed is any device pushing code (like my laptop, not configured). Manager is one device in the cluster that stores the outputs and the like. Worker is every device in the cluster (including Manager)
+
+TODO can a server POST to itself?
+
+
+
+
+Manager configuration:
+server_files
+    manager_files
+        listener.py
+        id_tracker.py
+        output1234
+            listener.py
+            data.csv # things are posted here
+
+    worker_files
+        task1234
+            data.py
+            models.py
+            runner.py
+
+
+TODO requirements.txt
