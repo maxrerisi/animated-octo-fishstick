@@ -10,7 +10,10 @@ def create_new_task():
     while new_task_id in data:
         new_task_id = hex(randint(0, 16_777_216))[2:]
 
-    data[new_task_id] = {"creation_time": time.time()}
+    data[new_task_id] = {
+        "creation_time": time.time(),
+        "active": True,
+    }  # TODO how to mark as inactive
     with open("cluster/manager/task_ids.json", "w") as fp:
         json.dump(data, fp, indent=4)
 

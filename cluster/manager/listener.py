@@ -1,17 +1,41 @@
 from task_processing import create_new_task
-import os
+import os, requests
 
 
 # TODO big thing is going to be figuring out relative importing
 
 
-# some flask decorator
+# TODO some flask decorator or maybe i call it using --flags
 def create_task():
-    # TODO figure out a way to turn a github folder into individual files (bc i don't wanna clone and then rename)
-    worker_link: str = None
+    worker_link: str = None  # just runner.py
     manager_link: str = None
+    columns_of_note: tuple["str"] = ("fold_col", "label_col")
     # manager should have a "task list"
-    os.system(f"mkdir cluster/manager/task-{create_new_task()}")
+    task_ID = create_new_task()
+    os.system(f"mkdir cluster/manager/task-{task_ID}")
+    for file in ["references.json", "task_list.csv", "requirements.txt"]:
+        file_link = f"{manager_link}/{file}"
+        file = f"{task_ID}/{file}"
+        response = requests.get(file_link)
+        if response.status_code == 200:
+            with open(file, "wb") as f:
+                f.write(response.content)
+        else:
+            print(
+                f"Failed to download file. Status code: {response.status_code}"
+            )  # TODO how to better handle these errors
+
+        # os.system(f"python3 {local_filename}")
+
+    tasks: list = None
+    for task in tasks:
+        run_task(*task, data_pull_link, param_pull_link, output_post_link)
+        # needs something like:
+        # while true
+        #   sleep(1)
+        #   for worker:
+        #       if free:
+        #           assign next task
 
 
 create_task()
@@ -33,3 +57,5 @@ create_task()
 
 
 # TODO is there a way to async things so it just keeps everything running (as opposed to round robin)
+
+# TODO input data is simply an
